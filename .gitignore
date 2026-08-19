@@ -1,63 +1,29 @@
 ```
-# Compiled and build artifacts
-*.class
-*.jar
-*.war
-*.aar
-*.so
-*.dll
-*.exe
-*.o
-*.obj
-*.out
-build/
-dist/
-target/
-
 # Dependencies
-node_modules/
-venv/
-.venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
 .gradle/
-.cargo/
-node_modules/
-
-# Logs and temp files
-*.log
-*.tmp
-*.swp
-*.swo
+build/
 
 # Environment
 .env
 .env.local
 *.env.*
 
-# Editors
-.vscode/
-.idea/
-*.iml
-*.ipr
-*.iws
+# Logs and temp files
+*.log
+*.tmp
 
-# System
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Coverage
+# Coverage reports
 coverage/
 htmlcov/
 .coverage
 
-# Android/Kotlin specific
-*.apk
-*.aab
-local.properties
-.gradle/
-.build/
-.externalNativeBuild/
-.cxx/
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
 ```

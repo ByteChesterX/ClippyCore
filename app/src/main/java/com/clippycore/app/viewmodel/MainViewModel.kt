@@ -211,21 +211,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
             try {
                 val result = _billingClient.queryPurchasesAsync(
                     QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
-                )
-                val purchases = result?.purchases ?: emptyList()
-                
-                val isUserPremium = purchases.any { purchase ->
-                    purchase.products.contains(PREMIUM_PRODUCT_ID) &&
-                    purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-                }
-                
-                _isPremium.value = isUserPremium
-                
-                // UI state'i güncelle
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        isPremiumUser = isUserPremium
-                    )
+                ) { _, purchasesList ->
+                    val purchases = purchasesList ?: emptyList()
+                    
+                    val isUserPremium = purchases.any { purchase ->
+                        purchase.products.contains(PREMIUM_PRODUCT_ID) &&
+                        purchase.purchaseState == Purchase.PurchaseState.PURCHASED
+                    }
+                    
+                    _isPremium.value = isUserPremium
+                    
+                    // UI state'i güncelle
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isPremiumUser = isUserPremium
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 // Hata durumunda premium değil varsay
@@ -290,9 +291,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
             _billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
                 if (billingResult.responseCode == BillingResponseCode.OK) {
                     val details = productDetailsList.firstOrNull { it.productId == productId }
-                    continuation.resume(details)
+                    continuation.resume(details) {}
                 } else {
-                    continuation.resume(null)
+                    continuation.resume(null) {}
                 }
             }
         }
