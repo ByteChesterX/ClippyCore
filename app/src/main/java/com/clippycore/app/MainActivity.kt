@@ -10,9 +10,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clippycore.app.ui.screens.MainScreen
 import com.clippycore.app.viewmodel.MainViewModel
+import com.clippycore.app.viewmodel.MainViewModelFactory
 
 /**
  * MainActivity - Uygulamanın ana aktivitesi
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        viewModel = viewModel { MainViewModel(application) }
+        viewModel = ViewModelProvider(this, MainViewModelFactory(application))[MainViewModel::class.java]
 
         setContent {
             MaterialTheme {

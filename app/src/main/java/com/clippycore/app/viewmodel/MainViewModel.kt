@@ -209,15 +209,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
     private fun checkPremiumStatus() {
         viewModelScope.launch {
             try {
-                val result = _billingClient.queryPurchasesAsync(
+                _billingClient.queryPurchasesAsync(
                     QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
                 ) { _, purchasesList ->
-                    val purchases = purchasesList ?: emptyList()
-                    
-                    val isUserPremium = purchases.any { purchase ->
+                    val isUserPremium = purchasesList?.any { purchase ->
                         purchase.products.contains(PREMIUM_PRODUCT_ID) &&
                         purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-                    }
+                    } ?: false
                     
                     _isPremium.value = isUserPremium
                     

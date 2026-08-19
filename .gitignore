@@ -1,9 +1,32 @@
 ```
+# Compiled and build artifacts
+*.class
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+build/
+target/
+
 # Dependencies
 .gradle/
-build/
+node_modules/
+venv/
+.venv/
+__pycache__/
 
-# Environment
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System
+.DS_Store
+Thumbs.db
 .env
 .env.local
 *.env.*
@@ -12,18 +35,18 @@ build/
 *.log
 *.tmp
 
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
+# Python specific
+*.pyc
+.mypy_cache/
+.pytest_cache/
+
+# Java/Kotlin specific
+*.jar
+*.war
+*.ear
 ```
