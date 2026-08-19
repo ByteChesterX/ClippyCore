@@ -1,4 +1,3 @@
-# Android Gradle Plugin
 pluginManagement {
     repositories {
         google()
