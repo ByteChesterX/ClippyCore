@@ -1,6 +1,7 @@
 package com.clippycore.app.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.*
@@ -208,7 +209,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
         viewModelScope.launch {
             try {
                 val purchases = _billingClient.queryPurchasesAsync(
-                    BillingClient.BillingClientParams.newBuilder().build()
+                    QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
                 )?.purchases ?: emptyList()
                 
                 val isUserPremium = purchases.any { purchase ->
@@ -338,22 +339,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
     }
 
     /**
-     * Satın alınamamış öğeleri tüket (gerekirse)
-     */
-    private fun consumePurchase(purchaseToken: String) {
-        val params = ConsumeParams.newBuilder()
-            .setPurchaseToken(purchaseToken)
-            .build()
-
-        _billingClient.consumeAsync(params) { billingResult, purchaseToken ->
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                // Tüketme başarılı
-                Log.d(TAG, "Purchase consumed successfully")
-            }
-        }
-    }
-
-    /**
      * ViewModel temizlendiğinde kaynakları serbest bırak
      */
     override fun onCleared() {
@@ -394,7 +379,7 @@ data class MainUiState(
 )
 
 /**
- * Dönüştürme tipleri enum
+ * Dönüştürme tipleri enum - TextTransformer.kt'den ayrı olarak burada tanımlanır
  */
 enum class TransformType {
     FORMAT_JSON,
