@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,7 @@ import com.clippycore.app.util.TextTransformer
  * - İçerik detay görüntüleme
  * - Dönüştürme işlemleri (JSON format, maskeleme vb.)
  */
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MainScreen(
     clipboardItems: List<ClipboardItem>,

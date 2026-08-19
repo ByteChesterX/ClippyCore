@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * AppDatabase - Room Database ana sınıfı
@@ -41,13 +42,13 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                     .fallbackToDestructiveMigration() // Şema değişikliklerinde verileri silerek migrate et
                     .addCallback(object : Callback() {
-                        override fun onCreate(db: android.database.sqlite.SQLiteDatabase) {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             // Veritabanı ilk oluşturulduğunda çalışacak kodlar
                             // Gerekirse başlangıç verileri eklenebilir
                         }
 
-                        override fun onOpen(db: android.database.sqlite.SQLiteDatabase) {
+                        override fun onOpen(db: SupportSQLiteDatabase) {
                             super.onOpen(db)
                             // Veritabanı her açıldığında çalışacak kodlar
                             // Örneğin: Foreign key'leri aktif et
