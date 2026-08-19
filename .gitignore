@@ -1,45 +1,82 @@
 ```
-# Kotlin/Android build artifacts
-*.class
-*.jar
-*.war
-*.aar
+# Android build artifacts
 *.apk
+*.aar
 *.dex
+*.so
+
+# Android build directories
+build/
+.gradle/
+local.properties
+
+# Android studio
+.idea/
+*.iml
+*.iws
 
 # Gradle
 .gradle/
-build/
-app/build/
+gradle-app.setting
 
-# Android
-*.ap_
-*.aab
-*.so
-
-# IDE
-.idea/
-*.iml
-*.ipr
-*.iws
-.vscode/
-
-# Compiled Python (if any Python in project)
-*.pyc
-__pycache__/
-*.pyo
-*.pyd
-
-# Logs
+# Log files
 *.log
+
+# Local configuration property files
+local.properties
+
+# Proguard generated/used file
+proguard-rules.pro
 
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
-# Dependencies
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python (if any Python scripts in project)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Temporary folders
+tmp/
+temp/
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Testing
+coverage/
+htmlcov/
+.coverage
+
+# Dependency directories
 node_modules/
-venv/
-.venv/
+vendor/
 ```
