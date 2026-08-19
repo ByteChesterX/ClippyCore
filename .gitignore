@@ -1,0 +1,45 @@
+```
+# Kotlin/Android build artifacts
+*.class
+*.jar
+*.war
+*.aar
+*.apk
+*.dex
+
+# Gradle
+.gradle/
+build/
+app/build/
+
+# Android
+*.ap_
+*.aab
+*.so
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Compiled Python (if any Python in project)
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+```
