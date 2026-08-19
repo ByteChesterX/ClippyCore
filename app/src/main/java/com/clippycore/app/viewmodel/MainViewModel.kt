@@ -12,6 +12,7 @@ import com.clippycore.app.data.database.ClipboardItem
 import com.clippycore.app.util.TextTransformer
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * MainViewModel - Ana ekran için ViewModel
@@ -208,9 +209,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
     private fun checkPremiumStatus() {
         viewModelScope.launch {
             try {
-                val purchases = _billingClient.queryPurchasesAsync(
+                val result = _billingClient.queryPurchasesAsync(
                     QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()
-                )?.purchases ?: emptyList()
+                )
+                val purchases = result?.purchases ?: emptyList()
                 
                 val isUserPremium = purchases.any { purchase ->
                     purchase.products.contains(PREMIUM_PRODUCT_ID) &&
@@ -236,23 +238,43 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
      * Premium ürün satın almasını başlat
      */
     fun initiatePremiumPurchase(activity: androidx.activity.ComponentActivity) {
-        val flowParams = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(
-                listOf(
-                    BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setProductDetails(getProductDetails(PREMIUM_PRODUCT_ID))
-                        .build()
-                )
-            )
-            .build()
+        viewModelScope.launch {
+            try {
+                val productDetails = getProductDetails(PREMIUM_PRODUCT_ID)
+                if (productDetails == null) {
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            billingError = "Ürün bilgileri bulunamadı"
+                        )
+                    }
+                    return@launch
+                }
+                
+                val flowParams = BillingFlowParams.newBuilder()
+                    .setProductDetailsParamsList(
+                        listOf(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(productDetails)
+                                .build()
+                        )
+                    )
+                    .build()
 
-        _billingClient.launchBillingFlow(activity, flowParams)
+                _billingClient.launchBillingFlow(activity, flowParams)
+            } catch (e: Exception) {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        billingError = "Satın alma başlatma hatası: ${e.message}"
+                    )
+                }
+            }
+        }
     }
 
     /**
-     * Ürün detaylarını getir
+     * Ürün detaylarını getir (suspend function)
      */
-    private fun getProductDetails(productId: String): ProductDetails? {
+    private suspend fun getProductDetails(productId: String): ProductDetails? {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
                 listOf(
@@ -264,15 +286,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), P
             )
             .build()
 
-        var productDetails: ProductDetails? = null
-        
-        _billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
-            if (billingResult.responseCode == BillingResponseCode.OK) {
-                productDetails = productDetailsList.firstOrNull { it.productId == productId }
+        return suspendCancellableCoroutine { continuation ->
+            _billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
+                if (billingResult.responseCode == BillingResponseCode.OK) {
+                    val details = productDetailsList.firstOrNull { it.productId == productId }
+                    continuation.resume(details)
+                } else {
+                    continuation.resume(null)
+                }
             }
         }
-
-        return productDetails
     }
 
     /**
