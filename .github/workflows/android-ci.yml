@@ -44,6 +44,9 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    # 403 hatasını çözen ana kısım: GITHUB_TOKEN için yazma izni verildi
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
@@ -83,7 +86,8 @@ jobs:
         sha256sum app-release.apk > app-release.apk.sha256
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      # Node deprecation uyarısı vermemesi için v2 sürümüne geçildi
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
